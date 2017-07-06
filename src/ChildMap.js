@@ -4,14 +4,13 @@ class ChildMap extends Component {
 
 
 	render() {	
- 	console.log(this.props.map)
     var directionsService = new this.props.google.maps.DirectionsService();
     var directionsDisplay = new this.props.google.maps.DirectionsRenderer();
     directionsDisplay.setMap(this.props.map);
     if(this.props.map===undefined){
     	return null;
     }
-    else console.log(this.props.map.center.lat() )
+    else {console.log(this.props.map.center.lat())}
       directionsService.route({
           origin: 'basel',
           destination: 'zurich',
@@ -24,7 +23,7 @@ class ChildMap extends Component {
           }
         });
 		return(
-			<div>lalala
+			<div>
 			</div>
 		)
 	}
