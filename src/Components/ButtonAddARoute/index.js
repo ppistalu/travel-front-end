@@ -22,7 +22,7 @@ const styles = {
   },
 };
 
-const FlatButtonExampleComplex = () => (
+const ButtonAddARoute = () => (
   <div style = {{display:'flex'}}>
     <FlatButton
       label="Add a route"
@@ -35,4 +35,4 @@ const FlatButtonExampleComplex = () => (
   </div>
 );
 
-export default FlatButtonExampleComplex;
+export default ButtonAddARoute;

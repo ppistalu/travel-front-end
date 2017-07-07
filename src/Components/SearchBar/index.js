@@ -1,16 +1,10 @@
 import React, {Component} from 'react';
 import AutoComplete from 'material-ui/AutoComplete';
 
-/**
- * The input is used to create the `dataSource`, so the input always matches three entries.
- */
-
-export default class AutoCompleteExampleSimple extends Component {
+export default class SearchBar extends Component {
   state = {
     dataSource: [],
   };
-
-  //value = Object.values(this.props.options).map(e => e.name);
 
   handleUpdateInput = (value) => {
     this.setState({
@@ -32,5 +26,3 @@ export default class AutoCompleteExampleSimple extends Component {
     );
   }
 }
-
-// dataSource: Object.values(this.props.options).map(e => e.name)
