@@ -4,7 +4,6 @@ export const currentRoute = (state={},action) => {
 			let newState = {...state}
 			action.currentRoute.forEach(route => newState[route.id] = route )
 			return newState;
-			console.log(newState);
 		default: 
 			return state;
 	}

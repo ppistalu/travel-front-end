@@ -13,8 +13,8 @@ export default class SearchBar extends Component {
   };
 
   render() {
-      let {options} = this.props;
-      options = Object.values(options).map(e => e.name)
+      // let {options} = this.props;
+      // options = Object.values(options).map(e => e.name)
     return (
       <div style ={{display:"flex"}}>
         <AutoComplete style = {{margin:'0 auto'}}

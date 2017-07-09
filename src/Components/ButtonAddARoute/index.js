@@ -1,7 +1,5 @@
 import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
-import ActionAndroid from 'material-ui/svg-icons/action/android';
 import Public from 'material-ui/svg-icons/social/public';
 
 const styles = {

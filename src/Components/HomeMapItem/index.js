@@ -4,8 +4,6 @@ import {GridTile} from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import {withRouter} from 'react-router';
-import {fetchSelectedRoute} from '../../Store/actions.js'
-import qs from 'query-string';
 import './index.css';
 
 class HomeMapItem extends Component {
@@ -20,7 +18,6 @@ class HomeMapItem extends Component {
   handleClick = (e) => {
     const id = this.props.route.id;
     this.props.history.push(`/route/${id}`);
-    this.props.dispatch(fetchSelectedRoute(id));
   }
   
 
