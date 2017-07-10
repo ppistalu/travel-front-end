@@ -13,6 +13,8 @@ import IconButton from 'material-ui/IconButton';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import HalfStar from 'material-ui/svg-icons/toggle/star-half';
 import Star from 'material-ui/svg-icons/toggle/star';
+import Toggle from 'material-ui/Toggle';
+import {changeCenter} from '../../Store/actions.js'
 
 const styles = {
   titleStyle: {
@@ -22,6 +24,34 @@ const styles = {
 };
 
 class TouristAttractionsList extends React.Component {
+   constructor(props) {
+    super(props);
+    this.state = {
+      expanded: false,
+    };
+  }
+
+  handleCenterChange = (lat,lng) => () => {
+    this.props.dispatch(changeCenter(lat,lng));
+    console.log(this.props.info)
+  }
+
+  handleExpandChange = (expanded) => {
+    this.setState({expanded: expanded});
+  };
+
+  handleToggle = (event, toggle) => {
+    this.setState({expanded: toggle});
+  };
+
+  handleExpand = () => {
+    this.setState({expanded: true});
+  };
+
+  handleReduce = () => {
+    this.setState({expanded: false});
+  };
+
 
     averageCalculator = (reviews) => {
     let totalReviews = 0;
@@ -74,28 +104,52 @@ class TouristAttractionsList extends React.Component {
       </div>
     </Paper>
 
-    <div style = {{marginLeft:'30px', fontWeight:'bold', marginTop:'30px'}}>Discover more about the main tourist attractions from your selected route:</div>
-    <div style = {{overflowY: 'scroll', height: '400px', marginTop:'50px',width:'800px'}}>
-      <Paper >
+    <Paper style = {{height: '400px',width:'800px'}}>
+
+        <p style = {{marginTop:'10px', paddingTop:'10px', paddingLeft:'20px', fontWeight:'bold', fontSize:'28px'}}>
+        Discover more about the main tourist attractions:
+        </p>
+
+
+      <div style = {{overflowY: 'scroll', height:'400px'}}>
         {Object.values(route).map(e => 
-        <Card >
-          <FlatButton style = {{marginTop:'15px', marginLeft:'15px', marginBottom:'10px'}}label={e.name} />
+        <Card key = {e.id} expanded={this.state.expanded} onExpandChange={this.handleExpandChange}>
+          <CardHeader
+          lat = {e.lat}
+          lng = {e.lng}
+          onClick = {this.handleCenterChange(e.latitude,e.longitude)}
+          style = {{cursor:'pointer'}}
+          showExpandableButton={true}
+          >
+            <img style = {{maxHeight:''}}src={e.photo}/>
+            <FlatButton label={e.name} />
+          </CardHeader>
           <CardText>
+            <Toggle
+            toggled={this.state.expanded}
+            onToggle={this.handleToggle}
+            labelPosition="right"
+            label="View more."
+            />
+          </CardText>
+          <CardText expandable={true}>
             {e.description}
           </CardText>
-            <CardActions>
-               <FlatButton style = {{marginLeft:'15px', marginBottom:'10px'}}label="Other routes containing this attraction" />
-            </CardActions>
+          <CardActions>
+          </CardActions>
         </Card>)}
-      </Paper>
-    </div>
+      </div>
+    </Paper>
   </div>
 
 )}}
 
 const mapStateToProps = (state) => ({
   route:state.currentRoute,
-  name:state.routes
+  info:state.changeCenter,
 })
 
 export default connect(mapStateToProps)(TouristAttractionsList);
+
+
+

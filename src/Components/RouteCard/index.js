@@ -1,24 +1,31 @@
 import React from 'react';
 import Marker from '../Marker'
 import Map from 'google-maps-react';
-import Paper from 'material-ui/Paper';
 import TouristAttractionsList from '../../Containers/RouteDescription'
 import FlatButton from 'material-ui/FlatButton';
-import ButtonAddARoute from '../../Components/ButtonAddARoute'
+import ButtonAddARoute from '../../Components/ButtonAddARoute';
+import Paper from 'material-ui/Paper'; 
+import {connect} from 'react-redux'
 
 
 class RouteCard extends React.Component {
     render(){
-    const lat = Object.values(this.props.route)[0].latitude;
-    const lng = Object.values(this.props.route)[0].longitude;
-    const center = { lat: lat,
-                       lng: lng }
-  return(
+    const bound = new window.google.maps.LatLngBounds();
+    Object.values(this.props.route).forEach(e => {
+      bound.extend( new window.google.maps.LatLng(e.latitude, e.longitude))}
+      )
+
+    const center = { lat: bound.getCenter().lat(),
+                       lng: bound.getCenter().lng() }
+
+    return(
   <div style = {{margin:'0px auto', display:'flex',justifyContent:"center"}}>
     <div style = {{ marginLeft:'3px'}}>
       <Paper style ={{width:'400px',height:'500px',marginTop:'30px'}} zDepth={5}>
           <Map google = {window.google}  
                initialCenter={center}
+               center={this.props.info}
+
                containerStyle={{width:'400px', height:'500px'}}
                style ={{width:'100%',height:'100%',display:'inline-block'}}>
             {Object.values(this.props.route).map(e => 
@@ -35,5 +42,9 @@ class RouteCard extends React.Component {
 )
 }}
 
-export default RouteCard;
+const mapStateToProps = (state) => ({
+  info:state.changeCenter,
+})
+
+export default connect(mapStateToProps)(RouteCard);
 

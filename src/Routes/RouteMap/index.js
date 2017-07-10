@@ -23,7 +23,7 @@ class RouteMap extends React.Component {
       <div>
         <NavigationBar/>
         <div>
-          <RouteCard  route = {route}/>
+          <RouteCard route = {route}/>
         </div>
       </div>
     )

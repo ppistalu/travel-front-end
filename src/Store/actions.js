@@ -20,3 +20,10 @@ const setCurrentRoute = (currentRoute) => ({
 	type: 'set',
 	currentRoute
 })
+
+export const changeCenter = (lat,lng) => ({
+	type:'changeCenter',
+	lat,
+	lng,
+
+})
