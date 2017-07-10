@@ -77,7 +77,6 @@ class TouristAttractionsList extends React.Component {
   }
   render(){
     const {route} = this.props
-    console.log(route)
     const reviews = 3;
     return (
   <div>

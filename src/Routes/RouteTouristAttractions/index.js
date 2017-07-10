@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {fetchSelectedRoute} from '../../Store/actions.js'
-import GoogleMaps from '../../Components/GoogleMaps'
+import GoogleMaps from '../../Containers/GoogleMaps'
 import NavigationBar from '../../Components/NavigationBar';
 
 class RouteTouristAttractions extends React.Component {
