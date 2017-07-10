@@ -1,31 +1,39 @@
 import React from 'react';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import Marker from '../Marker'
+import Map from 'google-maps-react';
+import Paper from 'material-ui/Paper';
+import TouristAttractionsList from '../../Containers/RouteDescription'
 import FlatButton from 'material-ui/FlatButton';
+import ButtonAddARoute from '../../Components/ButtonAddARoute'
 
-const RouteCard = () => (
-  <Card>
-    <CardHeader
-      title="URL Avatar"
-      subtitle="Subtitle"
-      avatar="images/jsa-128.jpg"
-    />
-    <CardMedia
-      overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
-    >
-      <img src="images/nature-600-337.jpg" alt="" />
-    </CardMedia>
-    <CardTitle title="Card title" subtitle="Card subtitle" />
-    <CardText>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-      Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-      Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-    </CardText>
-    <CardActions>
-      <FlatButton label="Action1" />
-      <FlatButton label="Action2" />
-    </CardActions>
-  </Card>
-);
+
+class RouteCard extends React.Component {
+    render(){
+    const lat = Object.values(this.props.route)[0].latitude;
+    const lng = Object.values(this.props.route)[0].longitude;
+    const center = { lat: lat,
+                       lng: lng }
+  return(
+  <div style = {{margin:'0px auto', display:'flex',justifyContent:"center"}}>
+    <div style = {{ marginLeft:'3px'}}>
+      <Paper style ={{width:'400px',height:'500px',marginTop:'30px'}} zDepth={5}>
+          <Map google = {window.google}  
+               initialCenter={center}
+               containerStyle={{width:'400px', height:'500px'}}
+               style ={{width:'100%',height:'100%',display:'inline-block'}}>
+            {Object.values(this.props.route).map(e => 
+              <Marker title = {e.name} key = {e.id} center = {{ lat: e.latitude,
+                                  lng: e.longitude }} />)}
+          </Map>
+      </Paper>
+      <ButtonAddARoute text = {"Start!"}/>
+    </div>
+    <div style = {{marginLeft:'20px', marginTop:'10px'}}>
+      <TouristAttractionsList/>
+    </div>
+  </div>
+)
+}}
 
 export default RouteCard;
+

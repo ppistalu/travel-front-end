@@ -23,7 +23,7 @@ class Home extends Component {
         <SignButton/>
         <p style = {styles.paragraphOne}>Please select your destination...</p>
     	  <SearchBar options = {routes}/>
-        <ButtonAddARoute/>
+        <ButtonAddARoute text = {"Add a route"}/>
     	  <p style = {styles.paragraphTwo}>Or let yourself inspired by our most popular routes:</p>
         <GridList style={styles.gridList} cols={2.2}>
       		{Object.values(routes).map(e => 

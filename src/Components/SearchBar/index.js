@@ -26,3 +26,6 @@ export default class SearchBar extends Component {
     );
   }
 }
+
+// https://www.stadt-zuerich.ch/content/dam/stzh/ted/Deutsch/oeffentlicher_raum/Kunst/Grafik_und_Foto/europaallee_480pix.jpg
+// https://cdn.zuerich.com/sites/default/files/styles/split_screen_big/public/keyvisual/web_zurich_museum_zoologischesmuseum_01.jpg?itok=Xm7-rX98&timestamp=1447940046

@@ -20,10 +20,10 @@ const styles = {
   },
 };
 
-const ButtonAddARoute = () => (
+const ButtonAddARoute = (props) => (
   <div style = {{display:'flex'}}>
     <FlatButton
-      label="Add a route"
+      label={props.text}
       labelPosition="before"
       style={styles.uploadButton}
       containerElement="label"
