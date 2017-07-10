@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import {fetchRoutes} from '../../Store/actions.js';
 import {connect} from 'react-redux';
-import HomeMapItem from '../../Components/HomeMapItem/index.js';
+import HomeMapItem from '../../Containers/HomeMapItem/';
 import {GridList} from 'material-ui/GridList';
-import SignButton from '../../Components/SignButton';
-import SearchBar from '../../Components/SearchBar';
-import ButtonAddARoute from '../../Components/ButtonAddARoute';
+import SignInUpButton from '../../Components/SignInUpButton';
+import HomeSearchBar from '../../Containers/HomeSearchBar';
+import ButtonFlatWorldMap from '../../Components/ButtonFlatWorldMap';
 
 class Home extends Component {
 
@@ -20,12 +20,12 @@ class Home extends Component {
     }
     return (
     	<div>
-        <SignButton/>
+        <SignInUpButton/>
         <p style = {styles.paragraphOne}>Please select your destination...</p>
-    	  <SearchBar options = {routes}/>
-        <ButtonAddARoute text = {"Add a route"}/>
+    	  <HomeSearchBar options = {routes}/>
+        <ButtonFlatWorldMap text = {"Add a route"}/>
     	  <p style = {styles.paragraphTwo}>Or let yourself inspired by our most popular routes:</p>
-        <GridList style={styles.gridList} cols={2.2}>
+        <GridList style = {styles.gridList} cols={2.2}>
       		{Object.values(routes).map(e => 
       			<HomeMapItem route ={e} key={e.id}/>
 	      	)}

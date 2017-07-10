@@ -20,7 +20,7 @@ const styles = {
   },
 };
 
-const ButtonAddARoute = (props) => (
+const ButtonFlatWorldMap = (props) => (
   <div style = {{display:'flex'}}>
     <FlatButton
       label={props.text}
@@ -33,4 +33,4 @@ const ButtonAddARoute = (props) => (
   </div>
 );
 
-export default ButtonAddARoute;
+export default ButtonFlatWorldMap;

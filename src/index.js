@@ -8,7 +8,7 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Home from './Routes/Home';
-import RouteMap from './Routes/RouteMap'
+import RouteMap from './Routes/RouteTouristAttractions'
 
 injectTapEventPlugin();
 

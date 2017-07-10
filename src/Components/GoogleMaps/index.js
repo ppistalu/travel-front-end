@@ -3,12 +3,12 @@ import Marker from '../Marker'
 import Map from 'google-maps-react';
 import TouristAttractionsList from '../../Containers/RouteDescription'
 import FlatButton from 'material-ui/FlatButton';
-import ButtonAddARoute from '../../Components/ButtonAddARoute';
+import ButtonFlatWorldMap from '../../Components/ButtonFlatWorldMap';
 import Paper from 'material-ui/Paper'; 
 import {connect} from 'react-redux'
 
 
-class RouteCard extends React.Component {
+class GoogleMaps extends React.Component {
     render(){
     const bound = new window.google.maps.LatLngBounds();
     Object.values(this.props.route).forEach(e => {
@@ -33,7 +33,7 @@ class RouteCard extends React.Component {
                                   lng: e.longitude }} />)}
           </Map>
       </Paper>
-      <ButtonAddARoute text = {"Start!"}/>
+      <ButtonFlatWorldMap text = {"Start!"}/>
     </div>
     <div style = {{marginLeft:'20px', marginTop:'10px'}}>
       <TouristAttractionsList/>
@@ -46,5 +46,5 @@ const mapStateToProps = (state) => ({
   info:state.changeCenter,
 })
 
-export default connect(mapStateToProps)(RouteCard);
+export default connect(mapStateToProps)(GoogleMaps);
 
