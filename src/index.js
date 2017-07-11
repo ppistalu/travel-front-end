@@ -19,7 +19,7 @@ ReactDOM.render(<Provider store={store}>
 				<Switch>
 					<Route exact path="/" component={Home} />
 					<Route exact path="/route/:id" component={RouteMap} />
-					<Route exact path="/route/:id" component={StartedRoute} />
+					<Route exact path="/route/start/:id" component={StartedRoute} />
 				</Switch>
 			</Router>
 		</MuiThemeProvider>

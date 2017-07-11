@@ -5,8 +5,7 @@ import TouristAttractionsList from '../TouristAttractionsList'
 import ButtonFlatWorldMap from '../../Components/ButtonFlatWorldMap';
 import Paper from 'material-ui/Paper'; 
 import {connect} from 'react-redux';
-
-
+import {withRouter} from 'react-router';
 
 class GoogleMaps extends React.Component {
 
@@ -21,8 +20,8 @@ class GoogleMaps extends React.Component {
   }
 
     handleStart = (e) => {
-      //this.props.history.push(`/route/start/${id}`);
-      console.log('staaaart')
+      const {id} = this.props.match.params
+      this.props.history.push(`/route/start/${id}`);
     }
 
     componentWillMount = () => {
@@ -51,7 +50,7 @@ class GoogleMaps extends React.Component {
                     }
                 </Map>
             </Paper>
-            <ButtonFlatWorldMap labelStyle={{margin:'0px'}}onClick={this.handleStart} text = {"Start!"}/>
+            <ButtonFlatWorldMap onClick={this.handleStart} text = {"Start!"}/>
           </div>
           <div style = {{marginLeft:'20px', marginTop:'10px'}}>
             <TouristAttractionsList/>
@@ -65,5 +64,5 @@ const mapStateToProps = (state) => ({
   info:state.changeCenter,
 })
 
-export default connect(mapStateToProps)(GoogleMaps);
+export default connect(mapStateToProps)(withRouter(GoogleMaps));
 
