@@ -1,35 +1,42 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import { CardText} from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
 import Paper from 'material-ui/Paper';
 import {GridTile} from 'material-ui/GridList';
 import TouristAttractionItem from '../../Components/TouristAttractionItem';
+import {withRouter} from 'react-router';
+import {fetchCurrentRouteInfo} from '../../Store/actions.js'
 
 class TouristAttractionsList extends React.Component {
 
+  componentDidMount = () => {
+    const {id} = this.props.match.params
+    this.props.dispatch(fetchCurrentRouteInfo(id))
+  }
+
   render(){
+    const {currentRouteInfo} = this.props.currentRouteInfo
+    if(currentRouteInfo===undefined){
+      return null;
+    }
     const {route} = this.props
     return (
   <div>
-
-    <Paper style = {{ display: 'flex', marginTop:'20px'}} zDepth={3}>
+    <Paper style = {{ display: 'flex', marginTop:'20px', alignItems: 'center'}} zDepth={3}>
       <div style = {{width:'570px'}}>
-        <FlatButton style = {{marginTop:'15px', marginLeft:'15px'}}label='name' />
-        <CardText>
-          <p>Description:</p>
-          <p>Duration:</p>
-          <p>Difficulty:</p>
-        </CardText>
-
+        <p style={{marginLeft:'30px', fontWeight:'bold'}}>{currentRouteInfo.name}</p>
+        <div style = {{marginLeft:"20px"}}>
+          <p style={{marginTop:'0px'}}><strong>Description:</strong>{currentRouteInfo.description}</p>
+          <p><strong>Duration:</strong>{" " + currentRouteInfo.duration + " hours"}</p>
+          <p><strong>Difficulty:</strong>{" " + currentRouteInfo.difficulty}</p>
+        </div>
       </div>
-      <div style = {{marginTop:'5px',width:'200px', height:'180px', alignSelf:'right'}}>
+
+      <div style = {{width:'200px', height:'180px'}}>
         <GridTile 
-            title='text'
+            title={currentRouteInfo.name}
             titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
             >
-            <img alt ="" 
-              src= "https://cdn.zuerich.com/sites/default/files/styles/split_screen_big/public/keyvisual/web_zurich_museum_zoologischesmuseum_01.jpg?itok=Xm7-rX98&timestamp=1447940046" />
+            <img src= {currentRouteInfo.photo} alt ="" />
           </GridTile>
       </div>
     </Paper>
@@ -46,13 +53,13 @@ class TouristAttractionsList extends React.Component {
   </div>
 
 )}}
-//            <img style = {{maxHeight:'80px'}}src={e.photo} alt = ""/>
 
 const mapStateToProps = (state) => ({
   route:state.currentRoute,
+  currentRouteInfo:state.currentRouteInfo
 })
 
-export default connect(mapStateToProps)(TouristAttractionsList);
+export default connect(mapStateToProps)(withRouter(TouristAttractionsList));
 
 
 

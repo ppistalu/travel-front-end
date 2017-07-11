@@ -51,7 +51,7 @@ class GoogleMaps extends React.Component {
                     }
                 </Map>
             </Paper>
-            <ButtonFlatWorldMap onClick={this.handleStart} text = {"Start!"}/>
+            <ButtonFlatWorldMap labelStyle={{margin:'0px'}}onClick={this.handleStart} text = {"Start!"}/>
           </div>
           <div style = {{marginLeft:'20px', marginTop:'10px'}}>
             <TouristAttractionsList/>

@@ -6,7 +6,7 @@ const styles = {
   uploadButton: {
     verticalAlign: 'middle',
     margin: '0 auto',
-    marginTop: '100px'
+    marginTop:'20px'
   },
   uploadInput: {
     cursor: 'pointer',

@@ -4,6 +4,8 @@ import {Card, CardHeader, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import Toggle from 'material-ui/Toggle';
 import {changeCenter} from '../../Store/actions.js'
+import MapsPlace from 'material-ui/svg-icons/maps/place';
+
 
 class TouristAttractionItem extends React.Component {
    
@@ -54,7 +56,7 @@ class TouristAttractionItem extends React.Component {
           style = {{cursor:'pointer'}}
           showExpandableButton={true}
         >
-            <FlatButton style={{paddingBottom:'0px'}}label={e.name} />
+            <FlatButton style={{paddingBottom:'0px', display:'flex', alignItems:'center'}}label={e.name}><MapsPlace style={{marginTop:'7px'}} /></FlatButton>
         </CardHeader>
         <CardText expandable={true}>
             {e.description}
@@ -63,7 +65,6 @@ class TouristAttractionItem extends React.Component {
   </div>
 
 )}}
-
 
 export default connect()(TouristAttractionItem);
 

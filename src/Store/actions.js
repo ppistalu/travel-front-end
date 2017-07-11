@@ -27,3 +27,14 @@ export const changeCenter = (lat,lng) => ({
 	lng,
 
 })
+
+export const fetchCurrentRouteInfo = (id) => (dispatch, getState) => {
+	fetch(`http://localhost:8080/home/inforoute/${id}`)
+	.then((res) => res.json())
+	.then(route => dispatch(currentRouteInfo(route)))
+}
+
+const currentRouteInfo = (currentRouteInfo) => ({
+	type: "currentRouteInfo",
+	currentRouteInfo,
+})
