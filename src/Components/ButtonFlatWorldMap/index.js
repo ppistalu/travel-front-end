@@ -24,6 +24,7 @@ const ButtonFlatWorldMap = (props) => (
   <div style = {{display:'flex'}}>
     <FlatButton
       label={props.text}
+      onClick={props.onClick}
       labelPosition="before"
       style={styles.uploadButton}
       containerElement="label"
