@@ -2,8 +2,15 @@ import React from 'react';
 
 class Marker extends React.Component {
 
-  componentDidUpdate = () => {
-      const pref = {
+  // componentWillRecieveProps = () => {
+      
+  //       console.log("marker",this.props.title)
+    
+
+  // }
+
+	render() {	
+    const pref = {
       map: this.props.map,
       position: this.props.center,
       // icon: icon,
@@ -12,9 +19,7 @@ class Marker extends React.Component {
       // draggable: draggable
     };
     new this.props.google.maps.Marker(pref);
-  }
-
-	render() {	
+    console.log("in render of marker",this.props.title)
     return null;
 	}
 

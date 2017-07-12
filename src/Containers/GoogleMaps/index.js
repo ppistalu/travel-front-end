@@ -1,6 +1,6 @@
 import React from 'react';
-import Marker from '../../Components/Marker'
-import Map from 'google-maps-react';
+// import Marker from '../../Components/Marker'
+import Map, { Marker } from 'google-maps-react';
 import TouristAttractionsList from '../TouristAttractionsList'
 import ButtonFlatWorldMap from '../../Components/ButtonFlatWorldMap';
 import Paper from 'material-ui/Paper'; 
@@ -26,12 +26,12 @@ class GoogleMaps extends React.Component {
 
     componentWillMount = () => {
       const bound = new window.google.maps.LatLngBounds();
-      Object.values(this.props.route).forEach(e => {
+      this.props.routes.forEach(e => {
         bound.extend( new window.google.maps.LatLng(e.latitude, e.longitude))
       });
       this.setState({center : { lat: bound.getCenter().lat(),
                        lng: bound.getCenter().lng() }
-      })
+      });
     }
 
     render(){
@@ -44,9 +44,11 @@ class GoogleMaps extends React.Component {
                      center={this.props.info}
                      containerStyle={{width:'400px', height:'500px'}}
                      style ={{width:'100%',height:'100%',display:'inline-block'}}>
-                  {Object.values(this.props.route).map(e => 
-                    <Marker title = {e.name} key = {e.id} center = {{ lat: e.latitude,
-                                        lng: e.longitude }} />)
+                  {this.props.routes.map(e => {
+                    return <Marker title={e.name} key={e.id} position={{ lat: e.latitude,
+                                        lng: e.longitude }} />
+                  })
+                    
                     }
                 </Map>
             </Paper>

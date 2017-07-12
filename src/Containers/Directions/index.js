@@ -1,4 +1,6 @@
 import { Component } from 'react';
+import {connect} from 'react-redux';
+import {userCurrentPosition} from '../../Store/actions.js';
 
 class Directions extends Component {
 
@@ -15,6 +17,27 @@ class Directions extends Component {
       }
   }
 
+success = (pos) => {
+  //console.log(pos)
+  this.setState({currentPosition:{
+    lat:pos.coords.latitude,
+    lng:pos.coords.longitude,
+  }})
+  this.props.dispatch(userCurrentPosition(this.state.currentPosition))
+}
+
+error = (err) => {
+  console.warn('ERROR(' + err.code + '): ' + err.message);
+}
+
+options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+};
+
+id = navigator.geolocation.watchPosition(this.success, this.error, this.options);
+
   directionsService = new this.props.google.maps.DirectionsService();
   directionsDisplay = new this.props.google.maps.DirectionsRenderer();
 
@@ -24,6 +47,7 @@ class Directions extends Component {
   })
 
     getOriginAndWaypoints = (values) => {
+
       if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition( (position) => {
             var pos = {
@@ -58,6 +82,8 @@ class Directions extends Component {
         
     }
 
+
+
   componentDidUpdate = () => {
     const {route} = this.props;
     const values = Object.values(route);
@@ -65,7 +91,22 @@ class Directions extends Component {
       this.getOriginAndWaypoints(values)
       return null;
     }
-    console.log(this.state)
+    var p1 = new this.props.google.maps.LatLng(this.state.currentPosition.lat, this.state.currentPosition.lng);
+    var p2 = new this.props.google.maps.LatLng(this.state.destination.lat, this.state.destination.lng);
+    // const p1 = this.state.currentPosition;
+    // const p2 = this.state.destination;
+    //console.log(this.state.currentPosition)
+    const calcDistance = (p1, p2) => {
+      return values.map(e => (this.props.google.maps.geometry.spherical.computeDistanceBetween(p1, 
+        new this.props.google.maps.LatLng(e.latitude,e.longitude)
+
+        ) / 1000).toFixed(2));
+    }
+
+    //console.log(values)
+
+    //console.log(calcDistance(p1,p2))
+
     //const result = this.getOriginAndWaypoints(values);
     //console.log("origin",result);
     this.directionsDisplay.setMap(this.props.map);
@@ -83,10 +124,11 @@ class Directions extends Component {
         });
   }
 
+
 	render() { 
 		return null;
 	}
 
 }
 
-export default Directions;
+export default connect()(Directions);

@@ -11,25 +11,27 @@ class RouteTouristAttractions extends React.Component {
   }
 
   render(){
-    if(Object.values(this.props.route)[0] === undefined) {
+
+    if (!this.props.routes.length) {
       return null;
     }
 
-    const {route} = this.props
-
+    const {routes} = this.props
     return(
       <div>
         <NavigationBar/>
         <div>
-          <GoogleMaps route = {route}/>
+          <GoogleMaps routes={routes}/>
         </div>
       </div>
     )
   }
 }
 
+
+
 const mapStateToProps = (state) => ({
-  route:state.currentRoute,
+  routes: Object.values(state.currentRoute),
 })
 
 export default connect(mapStateToProps)(RouteTouristAttractions);

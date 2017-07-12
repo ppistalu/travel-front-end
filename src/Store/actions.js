@@ -38,3 +38,8 @@ const currentRouteInfo = (currentRouteInfo) => ({
 	type: "currentRouteInfo",
 	currentRouteInfo,
 })
+
+export const userCurrentPosition = (userCurrentPosition) => ({
+	type: "userCurrentPosition",
+	userCurrentPosition,
+})
