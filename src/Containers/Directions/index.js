@@ -10,7 +10,8 @@ const customStyles = {
     right                 : 'auto',
     bottom                : 'auto',
     marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
+    transform             : 'translate(-50%, -50%)',
+    width                 : '600px'
   }
 };
 
@@ -35,37 +36,40 @@ class Directions extends Component {
 
   afterOpenModal = () => {
     // references are now sync'd and can be accessed.
-    this.subtitle.style.color = '#f00';
+    this.subtitle.style.color = '#006400';
   }
 
   closeModal = () => {
     this.setState({modalIsOpen: false});
   }
 
-success = (pos) => {
-  console.log(pos)
-  if(pos.coords.latitude===this.state.currentPosition.lat){
-    console.log("same pos")
-    return null;
+  success = (pos) => {
+    console.log('in da success')
+    if(pos.coords.latitude===this.state.currentPosition.lat){
+      console.log("same pos")
+      return null;
+    }
+    this.setState({currentPosition:{
+      lat:pos.coords.latitude,
+      lng:pos.coords.longitude,
+    }})
+    this.props.dispatch(userCurrentPosition({
+      lat:pos.coords.latitude,
+      lng:pos.coords.longitude,
+    }))
   }
-  this.setState({currentPosition:{
-    lat:pos.coords.latitude,
-    lng:pos.coords.longitude,
-  }})
-  this.props.dispatch(userCurrentPosition(this.state.currentPosition))
-}
 
-error = (err) => {
-  console.warn('ERROR(' + err.code + '): ' + err.message);
-}
+  error = (err) => {
+    console.warn('ERROR(' + err.code + '): ' + err.message);
+  }
 
-options = {
-  enableHighAccuracy: true,
-  timeout: 5000,
-  maximumAge: 0
-};
+  options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0
+  };
 
-id = navigator.geolocation.watchPosition(this.success, this.error, this.options);
+  id = navigator.geolocation.watchPosition(this.success, this.error, this.options);
 
   directionsService = new this.props.google.maps.DirectionsService();
   directionsDisplay = new this.props.google.maps.DirectionsRenderer();
@@ -90,6 +94,7 @@ id = navigator.geolocation.watchPosition(this.success, this.error, this.options)
                                     location: {lat : e.latitude, lng : e.longitude},
                                     stopover: true }))
                         });
+            this.props.dispatch(userCurrentPosition(pos))
           }, () => {
             alert("Hey, can't get your location. Origin will not be set to your current location.");
             this.setState({origin: this.convert(values[0]), 
@@ -119,25 +124,29 @@ id = navigator.geolocation.watchPosition(this.success, this.error, this.options)
       this.getOriginAndWaypoints(values)
       return null;
     }
-    var p1 = new this.props.google.maps.LatLng(this.state.currentPosition.lat, this.state.currentPosition.lng);
-    var p2 = values;
-    const calcDistance = (p1, p2) => {
-      return values.map(e => (this.props.google.maps.geometry.spherical.computeDistanceBetween(p1, 
-        new this.props.google.maps.LatLng(e.latitude,e.longitude)
-
-        ) / 1000).toFixed(2));
+    var currentPoint = new this.props.google.maps.LatLng(this.state.currentPosition.lat, this.state.currentPosition.lng);
+    const calcDistance = (current, points) => {
+      return points.map(point => (
+          this.props.google.maps.geometry.spherical.computeDistanceBetween(
+            current,
+            new this.props.google.maps.LatLng(point.latitude,point.longitude)
+          ) / 1000
+        ).toFixed(2)
+      );
     }
 
-    const distanceFromCurrentPosition = calcDistance(p1,p2)
+    const distanceFromCurrentPosition = calcDistance(currentPoint,values)
     // console.log(distanceFromCurrentPosition)
     //this.setState({distanceFromCurrentPosition});
 
-    if(distanceFromCurrentPosition.filter(e => e < 2).length>0){
-      const existingTouristAttraction = distanceFromCurrentPosition.filter(e => e < 2)[0]
+    if(distanceFromCurrentPosition.filter(e => e < 2).length > 0) {
+      const existingTouristAttraction = distanceFromCurrentPosition.filter(e => e < 2)[0];
+      console.log('in da true')
+      console.log(this.state.currentPosition)
       const ind = distanceFromCurrentPosition.indexOf(existingTouristAttraction)
-    if(!prevState.modalIsOpen) {  
-      this.setState({modalIsOpen: true});
-    }
+      if(!prevState.modalIsOpen) {  
+        this.setState({modalIsOpen: true});
+      }
     // if(Object.values(this.props.touristAttraction[ind])===undefined){
     //     return null;
     //   }
@@ -175,19 +184,19 @@ id = navigator.geolocation.watchPosition(this.success, this.error, this.options)
           style={customStyles}
           contentLabel="Example Modal"
         >
-          <h2 ref={subtitle => this.subtitle = subtitle}>Hey, we found this cool tourist attraction near you:</h2>
+        {Object.values(this.state.touristAtt).length > 0 &&
+          <div>
+            <h2 ref={subtitle => this.subtitle = subtitle}>Hey, we found this cool tourist attraction near you:
+            </h2>
+            <h3 style ={{textAlign:'center'}}>{this.state.touristAtt.name}</h3>
+          </div>
+          }
+          
           <button onClick={this.closeModal}>close</button>
           {Object.values(this.state.touristAtt).length > 0 &&
-            <div>{this.state.touristAtt.name}</div>
+            <div>{this.state.touristAtt.description}</div>
           }
 
-          <form>
-            <input />
-            <button>tab navigation</button>
-            <button>stays</button>
-            <button>inside</button>
-            <button>the modal</button>
-          </form>
         </Modal>
         <div style={{zIndex: '100000', position: 'relative', top:'-20px'}}>
         </div>
