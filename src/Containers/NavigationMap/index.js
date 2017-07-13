@@ -38,7 +38,7 @@ class NavigationMap extends React.Component {
        	<Map google = {window.google}
             initialCenter={this.state.center} 
             center={this.state.center} 
-            style ={{}}>
+            style ={{width:'600px',height:'600px',margin:'0 auto'}}>
             <Directions route={route} />
             <Marker position={this.props.currentPosition}/>
         </Map>
