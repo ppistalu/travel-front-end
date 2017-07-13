@@ -27,22 +27,18 @@ class NavigationMap extends React.Component {
     }
 
   render(){
-    console.log('in da render')
-    console.log(this.props.currentPosition)
     const {route} = this.props
     if(route[0]===undefined){
-      console.log('in undefined render')
     	return null;
     }
-    console.log(Object.keys(this.props.currentPosition).length)
-    const currentPosition = this.props.currentPosition;
-    const that = this.props.currentPosition
+
+
     return(
       <div>
        	<Map google = {window.google}
             initialCenter={this.state.center} 
             center={this.state.center} 
-            style ={{width:'400px',height:'400px',margin:'auto'}}>
+            style ={{}}>
             <Directions route={route} />
             <Marker position={this.props.currentPosition}/>
         </Map>

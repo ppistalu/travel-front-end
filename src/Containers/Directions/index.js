@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {userCurrentPosition} from '../../Store/actions.js';
 import Modal from 'react-modal';
+import Public from 'material-ui/svg-icons/social/public';
+import MapsPlace from 'material-ui/svg-icons/maps/place';
 
 const customStyles = {
   content : {
@@ -11,7 +13,9 @@ const customStyles = {
     bottom                : 'auto',
     marginRight           : '-50%',
     transform             : 'translate(-50%, -50%)',
-    width                 : '600px'
+    width                 : '300px',
+    height                : '400px',
+    textAlign             : 'center',
   }
 };
 
@@ -44,17 +48,13 @@ class Directions extends Component {
   }
 
   success = (pos) => {
-    console.log('in da success')
     if(pos.coords.latitude===this.state.currentPosition.lat){
-      console.log("same pos")
       return null;
     }
     this.setState({currentPosition:{
       lat:pos.coords.latitude,
       lng:pos.coords.longitude,
     }})
-    console.log('in da success');
-    console.log(pos.coords.latitude)
     this.props.dispatch(userCurrentPosition({
       lat: pos.coords.latitude,
       lng: pos.coords.longitude,
@@ -81,8 +81,23 @@ class Directions extends Component {
     lng: route.longitude,
   })
 
-    getOriginAndWaypoints = (route) => {
+    showDirection = () => {
+      this.directionsDisplay.setMap(this.props.map);
+      this.directionsService.route({
+      origin: this.state.origin,
+      destination: this.state.destination,
+      travelMode: 'WALKING',
+      waypoints: this.state.waypoints,
+        }, (response, status) => {
+      if (status === 'OK') {
+        this.directionsDisplay.setDirections(response);
+      } else {
+        window.alert('Directions request failed due to ' + status);
+      }
+    });
+    }
 
+    getOriginAndWaypoints = (route) => {
       if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition( (position) => {
             var pos = {
@@ -97,6 +112,7 @@ class Directions extends Component {
                                     stopover: true }))
                         });
             this.props.dispatch(userCurrentPosition(pos))
+            this.showDirection()
           }, () => {
             alert("Hey, can't get your location. Origin will not be set to your current location.");
             this.setState({origin: this.convert(this.props.route[0]), 
@@ -105,6 +121,7 @@ class Directions extends Component {
                             location: {lat : e.latitude, lng : e.longitude},
                             stopover: true})) 
                         });
+          this.showDirection()
           });
         } else {
           // Browser doesn't support Geolocation
@@ -114,19 +131,22 @@ class Directions extends Component {
                           location: {lat : e.latitude, lng : e.longitude},
                           stopover: true })) 
                         })
+          this.showDirection()
         }
         
     }
 
   componentDidUpdate = (prevProps, prevState) => {
-    console.log(this.props.touristAttraction);
     const {route} = this.props;
     const values = Object.values(route)
     if(this.state.origin===''){
       this.getOriginAndWaypoints(route)
       return null;
     }
-    var currentPoint = new this.props.google.maps.LatLng(this.state.currentPosition.lat, this.state.currentPosition.lng);
+    const currentPoint = new this.props.google.maps.LatLng(
+                         this.state.currentPosition.lat, 
+                         this.state.currentPosition.lng
+                         );
     const calcDistance = (current, points) => {
       return points.map(point => (
           this.props.google.maps.geometry.spherical.computeDistanceBetween(
@@ -138,44 +158,22 @@ class Directions extends Component {
     }
 
     const distanceFromCurrentPosition = calcDistance(currentPoint,values)
-    // console.log(distanceFromCurrentPosition)
-    //this.setState({distanceFromCurrentPosition});
 
-    if (distanceFromCurrentPosition.filter(e => e < 2).length > 0) {
-      const existingTouristAttraction = distanceFromCurrentPosition.filter(e => e < 2)[0];
-      console.log('in da true')
-      console.log(this.state.currentPosition)
+    if (distanceFromCurrentPosition.filter(e => e < 0.05).length > 0) {
+      const existingTouristAttraction = distanceFromCurrentPosition.filter(e => e < 0.05)[0];
       const ind = distanceFromCurrentPosition.indexOf(existingTouristAttraction)
-      if(!prevState.modalIsOpen) {  
-        this.setState({modalIsOpen: true});
-      }
-    // if(Object.values(this.props.touristAttraction[ind])===undefined){
-    //     return null;
-    //   }
       const touristAtt = Object.values(this.props.touristAttraction)[ind];
-      if(!prevState.modalIsOpen) {  
-        this.setState({touristAtt});
+      if(!prevState.modalIsOpen) {
+        this.setState({modalIsOpen: true,
+                       touristAtt
+        });
       }
-
-      this.directionsDisplay.setMap(this.props.map);
-      this.directionsService.route({
-            origin: this.state.origin,
-            destination: this.state.destination,
-            travelMode: 'WALKING',
-            waypoints: this.state.waypoints,
-          }, (response, status) => {
-            if (status === 'OK') {
-              this.directionsDisplay.setDirections(response);
-            } else {
-              window.alert('Directions request failed due to ' + status);
-            }
-          });
     }
+
   }
 
 
 	render() { 
-
 		return (
       <div>
         <Modal
@@ -185,23 +183,21 @@ class Directions extends Component {
           style={customStyles}
           contentLabel="Example Modal"
         >
-          {
-            Object.values(this.state.touristAtt).length > 0 &&
-            <div>
-              <h2 ref={ subtitle => this.subtitle = subtitle }>Hey, we found this cool tourist attraction near you:
+          <div>
+              <h2 ref={ subtitle => this.subtitle = subtitle }>
+                Hey, we found this cool tourist attraction near you:
               </h2>
-              <h3 style ={ {textAlign:'center'} }>{this.state.touristAtt.name}</h3>
-            </div>
-          }
-          
+              {Object.keys(this.state.touristAtt).length > 0 &&
+                <h3 style ={ {textAlign:'center'} }><MapsPlace style={{marginRight:'5px'}}/>
+                  {this.state.touristAtt.name}
+                </h3>
+              }
+          </div>
           <button onClick={this.closeModal}>close</button>
-          {
-            Object.values(this.state.touristAtt).length > 0 &&
-            <div>{this.state.touristAtt.description}</div>
+          {Object.keys(this.state.touristAtt).length > 0 &&
+            <p style ={ {textAlign:'center'} }>{this.state.touristAtt.description}</p>
           }
-
         </Modal>
-        <div style={{zIndex: '100000', position: 'relative', top:'-20px'}} />
       </div>)
 	}
 
