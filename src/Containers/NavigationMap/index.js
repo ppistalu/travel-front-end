@@ -27,6 +27,8 @@ class NavigationMap extends React.Component {
     }
 
   render(){
+    console.log('in da render')
+    console.log(this.props.currentPosition)
     const {route} = this.props
     if(route[0]===undefined){
       console.log('in undefined render')
@@ -41,8 +43,8 @@ class NavigationMap extends React.Component {
             initialCenter={this.state.center} 
             center={this.state.center} 
             style ={{width:'400px',height:'400px',margin:'auto'}}>
-            <Directions route = {route} />
-            <Marker position = {this.props.currentPosition}/>
+            <Directions route={route} />
+            <Marker position={this.props.currentPosition}/>
         </Map>
       </div>
     )

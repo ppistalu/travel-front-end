@@ -10,7 +10,8 @@ const customStyles = {
     right                 : 'auto',
     bottom                : 'auto',
     marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
+    transform             : 'translate(-50%, -50%)',
+    width                 : '600px'
   }
 };
 
@@ -35,7 +36,7 @@ class Directions extends Component {
 
   afterOpenModal = () => {
     // references are now sync'd and can be accessed.
-    this.subtitle.style.color = '#f00';
+    this.subtitle.style.color = '#006400';
   }
 
   closeModal = () => {
@@ -43,8 +44,9 @@ class Directions extends Component {
   }
 
   success = (pos) => {
-    console.log(pos)
+    console.log('in da success')
     if(pos.coords.latitude===this.state.currentPosition.lat){
+      console.log("same pos")
       return null;
     }
     this.setState({currentPosition:{
@@ -94,6 +96,7 @@ class Directions extends Component {
                                     location: {lat : e.latitude, lng : e.longitude},
                                     stopover: true }))
                         });
+            this.props.dispatch(userCurrentPosition(pos))
           }, () => {
             alert("Hey, can't get your location. Origin will not be set to your current location.");
             this.setState({origin: this.convert(this.props.route[0]), 
@@ -117,57 +120,62 @@ class Directions extends Component {
 
   componentDidUpdate = (prevProps, prevState) => {
     console.log(this.props.touristAttraction);
-    const route = this.props;
+    const {route} = this.props;
+    const values = Object.values(route)
     if(this.state.origin===''){
       this.getOriginAndWaypoints(route)
       return null;
     }
-
-    const p1 = new this.props.google.maps.LatLng(this.state.currentPosition.lat, this.state.currentPosition.lng);
-    const p2 = this.props.route;
-    const calcDistance = (p1, p2) => {
-      return p2.map(e => (this.props.google.maps.geometry.spherical.computeDistanceBetween(p1, 
-        new this.props.google.maps.LatLng(e.latitude,e.longitude)
-        ) / 1000).toFixed(2));
+    var currentPoint = new this.props.google.maps.LatLng(this.state.currentPosition.lat, this.state.currentPosition.lng);
+    const calcDistance = (current, points) => {
+      return points.map(point => (
+          this.props.google.maps.geometry.spherical.computeDistanceBetween(
+            current,
+            new this.props.google.maps.LatLng(point.latitude,point.longitude)
+          ) / 1000
+        ).toFixed(2)
+      );
     }
 
-    const distanceFromCurrentPosition = calcDistance(p1,p2)
+    const distanceFromCurrentPosition = calcDistance(currentPoint,values)
+    // console.log(distanceFromCurrentPosition)
+    //this.setState({distanceFromCurrentPosition});
 
-    const nearByWithoutFilter = this.props.touristAttraction.map((e,index) => {
-      e["distance"]= distanceFromCurrentPosition[index]
-      return {e};
-    }
-
-    const nearBy = nearByWithoutFilter.filter(e => e.distance < 2);
-
-    console.log(nearBy);
-    if(nearBy.length>0) {
+    if (distanceFromCurrentPosition.filter(e => e < 2).length > 0) {
+      const existingTouristAttraction = distanceFromCurrentPosition.filter(e => e < 2)[0];
+      console.log('in da true')
+      console.log(this.state.currentPosition)
+      const ind = distanceFromCurrentPosition.indexOf(existingTouristAttraction)
       if(!prevState.modalIsOpen) {  
         this.setState({modalIsOpen: true});
       }
-      if(!prevState.touristAtt) {  
-        this.setState({touristAtt:nearBy[0]});
+    // if(Object.values(this.props.touristAttraction[ind])===undefined){
+    //     return null;
+    //   }
+      const touristAtt = Object.values(this.props.touristAttraction)[ind];
+      if(!prevState.modalIsOpen) {  
+        this.setState({touristAtt});
       }
-    }
 
-    this.directionsDisplay.setMap(this.props.map);
-    this.directionsService.route({
-          origin: this.state.origin,
-          destination: this.state.destination,
-          travelMode: 'WALKING',
-          waypoints: this.state.waypoints,
-        },(response, status) => {
-          if (status === 'OK') {
-            this.directionsDisplay.setDirections(response);
-          } else {
-            window.alert('Directions request failed due to ' + status);
-          }
-        });
+      this.directionsDisplay.setMap(this.props.map);
+      this.directionsService.route({
+            origin: this.state.origin,
+            destination: this.state.destination,
+            travelMode: 'WALKING',
+            waypoints: this.state.waypoints,
+          }, (response, status) => {
+            if (status === 'OK') {
+              this.directionsDisplay.setDirections(response);
+            } else {
+              window.alert('Directions request failed due to ' + status);
+            }
+          });
+    }
   }
 
 
 	render() { 
-    console.log(this.state.props)
+
 		return (
       <div>
         <Modal
@@ -177,38 +185,30 @@ class Directions extends Component {
           style={customStyles}
           contentLabel="Example Modal"
         >
-          <h2 ref={subtitle => this.subtitle = subtitle}>Hey, we found this cool tourist attraction near you:</h2>
+          {
+            Object.values(this.state.touristAtt).length > 0 &&
+            <div>
+              <h2 ref={ subtitle => this.subtitle = subtitle }>Hey, we found this cool tourist attraction near you:
+              </h2>
+              <h3 style ={ {textAlign:'center'} }>{this.state.touristAtt.name}</h3>
+            </div>
+          }
+          
           <button onClick={this.closeModal}>close</button>
-          {Object.values(this.state.touristAtt).length > 0 &&
-            <div>{this.state.touristAtt.name}</div>
+          {
+            Object.values(this.state.touristAtt).length > 0 &&
+            <div>{this.state.touristAtt.description}</div>
           }
 
-          <form>
-            <input />
-            <button>tab navigation</button>
-            <button>stays</button>
-            <button>inside</button>
-            <button>the modal</button>
-          </form>
         </Modal>
-        <div style={{zIndex: '100000', position: 'relative', top:'-20px'}}>
-        </div>
+        <div style={{zIndex: '100000', position: 'relative', top:'-20px'}} />
       </div>)
 	}
 
 }
 
-const mapStateToProps = (state,props) => {
-    touristAttraction: Object.values(state.currentRoute)
-  }
-}
+const mapStateToProps = (state,props) => ({
+  touristAttraction: Object.values(state.currentRoute)
+})
 
 export default connect(mapStateToProps)(Directions);
-
-
-
-
-
- 
-    
-  
