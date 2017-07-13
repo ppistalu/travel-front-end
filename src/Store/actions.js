@@ -1,6 +1,5 @@
 export const fetchRoutes = () => (dispatch,getState) => {
-	fetch('http://localhost:8080/home')
-	//fetch('https://travel-rts.herokuapp.com/home')
+	fetch('https://travel-rts.herokuapp.com/home')
 	.then((res) => res.json())
 	.then(routes => dispatch(addRoutes(routes)))
 }
@@ -11,7 +10,7 @@ const addRoutes = (routes) => ({
 })
 
 export const fetchSelectedRoute = (id) => (dispatch, getState) => {
-	fetch(`http://localhost:8080/routes/${id}`)
+	fetch(`https://travel-rts.herokuapp.com/routes/${id}`)
 	.then((res) => res.json())
 	.then(route => dispatch(setCurrentRoute(route)))
 }
@@ -29,7 +28,7 @@ export const changeCenter = (lat,lng) => ({
 })
 
 export const fetchCurrentRouteInfo = (id) => (dispatch, getState) => {
-	fetch(`http://localhost:8080/home/inforoute/${id}`)
+	fetch(`https://travel-rts.herokuapp.com/home/inforoute/${id}`)
 	.then((res) => res.json())
 	.then(route => dispatch(currentRouteInfo(route)))
 }
