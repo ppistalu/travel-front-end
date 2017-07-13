@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 
 
 class NavigationMap extends React.Component {
+
 	constructor(props) {
 	    super(props);
 	    this.state = {
@@ -17,7 +18,7 @@ class NavigationMap extends React.Component {
 
    componentWillMount = () => {
       const bound = new window.google.maps.LatLngBounds();
-      Object.values(this.props.route).forEach(e => {
+      this.props.route.forEach(e => {
         bound.extend( new window.google.maps.LatLng(e.latitude, e.longitude))
       });
       this.setState({center : { lat: bound.getCenter().lat(),
@@ -27,7 +28,7 @@ class NavigationMap extends React.Component {
 
   render(){
     const {route} = this.props
-    if(Object.values(route)[0]===undefined){
+    if(route[0]===undefined){
       console.log('in undefined render')
     	return null;
     }
@@ -54,10 +55,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps)(NavigationMap);
 
-// {unreadMessages.length > 0 &&
-//         <h2>
-//           You have {unreadMessages.length} unread messages.
-//         </h2>
-// }
 
 

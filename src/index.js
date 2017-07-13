@@ -13,6 +13,8 @@ import StartedRoute from './Routes/StartedRoute'
 
 injectTapEventPlugin();
 
+//future dispatch of currentposition
+
 ReactDOM.render(<Provider store={store}>
 		<MuiThemeProvider>
 			<Router>

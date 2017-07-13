@@ -23,7 +23,7 @@ class StartedRoute extends React.Component {
 
   render(){
     const {route} = this.props
-    if(Object.values(route)[0]===undefined){
+    if(route[0]===undefined){
     	return null;
     }
     return(
@@ -37,7 +37,7 @@ class StartedRoute extends React.Component {
 
 const mapStateToProps = (state) => ({
 	routeInfo:state.currentRouteInfo,
-	route:state.currentRoute
+	route:Object.values(state.currentRoute)
 })
 
 

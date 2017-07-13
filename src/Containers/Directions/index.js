@@ -42,30 +42,34 @@ class Directions extends Component {
     this.setState({modalIsOpen: false});
   }
 
-success = (pos) => {
-  console.log(pos)
-  if(pos.coords.latitude===this.state.currentPosition.lat){
-    console.log("same pos")
-    return null;
+  success = (pos) => {
+    console.log(pos)
+    if(pos.coords.latitude===this.state.currentPosition.lat){
+      return null;
+    }
+    this.setState({currentPosition:{
+      lat:pos.coords.latitude,
+      lng:pos.coords.longitude,
+    }})
+    console.log('in da success');
+    console.log(pos.coords.latitude)
+    this.props.dispatch(userCurrentPosition({
+      lat: pos.coords.latitude,
+      lng: pos.coords.longitude,
+    }))
   }
-  this.setState({currentPosition:{
-    lat:pos.coords.latitude,
-    lng:pos.coords.longitude,
-  }})
-  this.props.dispatch(userCurrentPosition(this.state.currentPosition))
-}
 
-error = (err) => {
-  console.warn('ERROR(' + err.code + '): ' + err.message);
-}
+  error = (err) => {
+    console.warn('ERROR(' + err.code + '): ' + err.message);
+  }
 
-options = {
-  enableHighAccuracy: true,
-  timeout: 5000,
-  maximumAge: 0
-};
+  options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0
+  };
 
-id = navigator.geolocation.watchPosition(this.success, this.error, this.options);
+  id = navigator.geolocation.watchPosition(this.success, this.error, this.options);
 
   directionsService = new this.props.google.maps.DirectionsService();
   directionsDisplay = new this.props.google.maps.DirectionsRenderer();
@@ -75,7 +79,7 @@ id = navigator.geolocation.watchPosition(this.success, this.error, this.options)
     lng: route.longitude,
   })
 
-    getOriginAndWaypoints = (values) => {
+    getOriginAndWaypoints = (route) => {
 
       if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition( (position) => {
@@ -85,25 +89,25 @@ id = navigator.geolocation.watchPosition(this.success, this.error, this.options)
             };
             this.setState({currentPosition:pos,
                           origin:pos, 
-                          destination: this.convert(values[values.length-1]),
-                          waypoints: values.slice(0, -1).map(e =>({
+                          destination: this.convert(this.props.route[this.props.route.length-1]),
+                          waypoints: this.props.route.slice(0, -1).map(e =>({
                                     location: {lat : e.latitude, lng : e.longitude},
                                     stopover: true }))
                         });
           }, () => {
             alert("Hey, can't get your location. Origin will not be set to your current location.");
-            this.setState({origin: this.convert(values[0]), 
-                          destination: this.convert(values[values.length-1]),
-                          waypoints: values.slice(1,(values.length-1)).map(e => ({
+            this.setState({origin: this.convert(this.props.route[0]), 
+                          destination: this.convert(this.props.route[this.props.route.length-1]),
+                          waypoints: this.props.route.slice(1,(this.props.route.length-1)).map(e => ({
                             location: {lat : e.latitude, lng : e.longitude},
                             stopover: true})) 
                         });
           });
         } else {
           // Browser doesn't support Geolocation
-          this.setState({origin: this.convert(values[0]), 
-                        destination: this.convert(values[values.length-1]),
-                        waypoints: values.slice(1,(values.length-1)).map(e => ({
+          this.setState({origin: this.convert(route[0]), 
+                        destination: this.convert(route[route.length-1]),
+                        waypoints: route.slice(1,(route.length-1)).map(e => ({
                           location: {lat : e.latitude, lng : e.longitude},
                           stopover: true })) 
                         })
@@ -113,40 +117,38 @@ id = navigator.geolocation.watchPosition(this.success, this.error, this.options)
 
   componentDidUpdate = (prevProps, prevState) => {
     console.log(this.props.touristAttraction);
-    const {route} = this.props;
-    const values = Object.values(route);
+    const route = this.props;
     if(this.state.origin===''){
-      this.getOriginAndWaypoints(values)
+      this.getOriginAndWaypoints(route)
       return null;
     }
-    var p1 = new this.props.google.maps.LatLng(this.state.currentPosition.lat, this.state.currentPosition.lng);
-    var p2 = values;
-    const calcDistance = (p1, p2) => {
-      return values.map(e => (this.props.google.maps.geometry.spherical.computeDistanceBetween(p1, 
-        new this.props.google.maps.LatLng(e.latitude,e.longitude)
 
+    const p1 = new this.props.google.maps.LatLng(this.state.currentPosition.lat, this.state.currentPosition.lng);
+    const p2 = this.props.route;
+    const calcDistance = (p1, p2) => {
+      return p2.map(e => (this.props.google.maps.geometry.spherical.computeDistanceBetween(p1, 
+        new this.props.google.maps.LatLng(e.latitude,e.longitude)
         ) / 1000).toFixed(2));
     }
 
     const distanceFromCurrentPosition = calcDistance(p1,p2)
-    // console.log(distanceFromCurrentPosition)
-    //this.setState({distanceFromCurrentPosition});
 
-    if(distanceFromCurrentPosition.filter(e => e < 2).length>0){
-      const existingTouristAttraction = distanceFromCurrentPosition.filter(e => e < 2)[0]
-      const ind = distanceFromCurrentPosition.indexOf(existingTouristAttraction)
-    if(!prevState.modalIsOpen) {  
-      this.setState({modalIsOpen: true});
+    const nearByWithoutFilter = this.props.touristAttraction.map((e,index) => {
+      e["distance"]= distanceFromCurrentPosition[index]
+      return {e};
     }
-    // if(Object.values(this.props.touristAttraction[ind])===undefined){
-    //     return null;
-    //   }
-    const touristAtt = Object.values(this.props.touristAttraction)[ind];
-    if(!prevState.modalIsOpen) {  
-    this.setState({touristAtt});
-    }
-  }
 
+    const nearBy = nearByWithoutFilter.filter(e => e.distance < 2);
+
+    console.log(nearBy);
+    if(nearBy.length>0) {
+      if(!prevState.modalIsOpen) {  
+        this.setState({modalIsOpen: true});
+      }
+      if(!prevState.touristAtt) {  
+        this.setState({touristAtt:nearBy[0]});
+      }
+    }
 
     this.directionsDisplay.setMap(this.props.map);
     this.directionsService.route({
@@ -165,7 +167,7 @@ id = navigator.geolocation.watchPosition(this.success, this.error, this.options)
 
 
 	render() { 
-    console.log(Object.values(this.state.touristAtt).length)
+    console.log(this.state.props)
 		return (
       <div>
         <Modal
@@ -196,9 +198,10 @@ id = navigator.geolocation.watchPosition(this.success, this.error, this.options)
 
 }
 
-const mapStateToProps = (state) => ({
-  touristAttraction: state.currentRoute,
-})
+const mapStateToProps = (state,props) => {
+    touristAttraction: Object.values(state.currentRoute)
+  }
+}
 
 export default connect(mapStateToProps)(Directions);
 
