@@ -1,22 +1,8 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {userCurrentPosition} from '../../Store/actions.js';
-import Modal from 'react-modal';
-import MapsPlace from 'material-ui/svg-icons/maps/place';
+import Alert from '../../Components/Alert'
 
-const customStyles = {
-  content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)',
-    width                 : '300px',
-    height                : '400px',
-    textAlign             : 'center',
-  }
-};
 
 class Directions extends Component {
 
@@ -34,16 +20,6 @@ class Directions extends Component {
         modalIsOpen: false,
         touristAtt: {}
       }
-  }
-
-
-  afterOpenModal = () => {
-    // references are now sync'd and can be accessed.
-    this.subtitle.style.color = '#006400';
-  }
-
-  closeModal = () => {
-    this.setState({modalIsOpen: false});
   }
 
   success = (pos) => {
@@ -110,7 +86,6 @@ class Directions extends Component {
                                     location: {lat : e.latitude, lng : e.longitude},
                                     stopover: true }))
                         });
-            this.props.dispatch(userCurrentPosition(pos))
             this.showDirection()
           }, () => {
             alert("Hey, can't get your location. Origin will not be set to your current location.");
@@ -137,66 +112,21 @@ class Directions extends Component {
 
   componentDidUpdate = (prevProps, prevState) => {
     const {route} = this.props;
-    const values = Object.values(route)
     if(this.state.origin===''){
       this.getOriginAndWaypoints(route)
       return null;
     }
-    const currentPoint = new this.props.google.maps.LatLng(
-                         this.state.currentPosition.lat, 
-                         this.state.currentPosition.lng
-                         );
-    const calcDistance = (current, points) => {
-      return points.map(point => (
-          this.props.google.maps.geometry.spherical.computeDistanceBetween(
-            current,
-            new this.props.google.maps.LatLng(point.latitude,point.longitude)
-          ) / 1000
-        ).toFixed(2)
-      );
-    }
-
-    const distanceFromCurrentPosition = calcDistance(currentPoint,values)
-
-    if (distanceFromCurrentPosition.filter(e => e < 0.05).length > 0) {
-      const existingTouristAttraction = distanceFromCurrentPosition.filter(e => e < 0.05)[0];
-      const ind = distanceFromCurrentPosition.indexOf(existingTouristAttraction)
-      const touristAtt = Object.values(this.props.touristAttraction)[ind];
-      if(!prevState.modalIsOpen) {
-        this.setState({modalIsOpen: true,
-                       touristAtt
-        });
-      }
-    }
-
   }
 
 
 	render() { 
+    const {touristAttraction,route} = this.props
+    const {currentPosition} = this.state;
 		return (
       <div>
-        <Modal
-          isOpen={this.state.modalIsOpen}
-          onAfterOpen={this.afterOpenModal}
-          onRequestClose={this.closeModal}
-          style={customStyles}
-          contentLabel="Example Modal"
-        >
-          <div>
-              <h2 ref={ subtitle => this.subtitle = subtitle }>
-                Hey, we found this cool tourist attraction near you:
-              </h2>
-              {Object.keys(this.state.touristAtt).length > 0 &&
-                <h3 style ={ {textAlign:'center'} }><MapsPlace style={{marginRight:'5px'}}/>
-                  {this.state.touristAtt.name}
-                </h3>
-              }
-          </div>
-          <button onClick={this.closeModal}>close</button>
-          {Object.keys(this.state.touristAtt).length > 0 &&
-            <p style ={ {textAlign:'center'} }>{this.state.touristAtt.description}</p>
-          }
-        </Modal>
+        <Alert touristAttraction={ touristAttraction } 
+               currentPosition ={ currentPosition }
+              route={ route } />
       </div>)
 	}
 

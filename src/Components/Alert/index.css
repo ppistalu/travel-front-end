@@ -1,0 +1,22 @@
+.PhotoAndCloseButton {
+	display: flex;
+	align-items: center; 
+	justify-content: center; 
+	flex-direction: column;
+}
+
+.CloseButton {
+	margin-top: 5px;
+}
+
+.Description {
+	text-align: center;
+}
+
+.FirstParagraph {
+	font-weight: bold;
+}
+
+.SecondParagraph {
+	margin-right: 5px;
+}
