@@ -56,11 +56,13 @@ class Alert extends React.Component {
     const {route} = this.props;
     const distanceFromCurrentPosition = calcDistance(currentPoint,route)
 
-    if ((distanceFromCurrentPosition.filter(e => e < 0.05).length > 0)&&
-      (distanceFromCurrentPosition.filter(e => e < 0.05)[0])!==this.state.touristAtt) {
+    if (distanceFromCurrentPosition.filter(e => e < 0.05).length > 0) {
       const existingTouristAttraction = distanceFromCurrentPosition.filter(e => e < 0.05)[0];
       const ind = distanceFromCurrentPosition.indexOf(existingTouristAttraction)
       const touristAtt = Object.values(this.props.touristAttraction)[ind];
+      if(touristAtt===this.state.touristAtt){
+        return;
+      }
       if(!prevState.modalIsOpen) {
         this.setState({modalIsOpen: true,
                        touristAtt
