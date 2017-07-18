@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {userCurrentPosition} from '../../Store/actions.js';
 import Modal from 'react-modal';
-import Public from 'material-ui/svg-icons/social/public';
 import MapsPlace from 'material-ui/svg-icons/maps/place';
 
 const customStyles = {

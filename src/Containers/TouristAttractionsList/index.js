@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import Paper from 'material-ui/Paper';
 import {GridTile} from 'material-ui/GridList';
-import TouristAttractionItem from '../../Components/TouristAttractionItem';
+import TouristAttractionItem from '../TouristAttractionItem';
 import {withRouter} from 'react-router';
 import {fetchCurrentRouteInfo} from '../../Store/actions.js'
 

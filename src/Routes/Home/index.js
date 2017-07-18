@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import HomeMapItem from '../../Containers/HomeMapItem/';
 import {GridList} from 'material-ui/GridList';
 import SignInUpButton from '../../Components/SignInUpButton';
-import HomeSearchBar from '../../Containers/HomeSearchBar';
+import HomeSearchBar from '../../Components/HomeSearchBar';
 import ButtonFlatWorldMap from '../../Components/ButtonFlatWorldMap';
 
 class Home extends Component {
@@ -59,6 +59,6 @@ const styles = {
   },
   paragraphTwo: {
     textAlign:'center', 
-    marginTop:"60px"
+    marginTop:"120px"
   },
 };	      	
