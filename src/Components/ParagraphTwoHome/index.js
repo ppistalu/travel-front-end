@@ -8,9 +8,10 @@ const styles = {
   },
   paragrapTwoMobilePortait: {
     textAlign:'center', 
-    marginTop:"50px",
+    marginTop:"40px",
     marginLeft:'30px',
     marginRight:'20px',
+    marginBottom:'0px'
   },
   paragrapTwoMobile: {
     textAlign:'center', 
