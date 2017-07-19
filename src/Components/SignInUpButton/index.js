@@ -18,15 +18,15 @@ const styles = {
  		diplay:'flex',
  		alignItems: "center",
     	justifyContent: "center",
-    	marginLeft:'100px'
+    	marginLeft:'50px'
  	},
- 	button: {
+ 	buttonLeft: {
  		marginTop:'20px',
  		marginLeft: '20px',
  	},
- 	button: {
+ 	buttonRight: {
  		marginTop:'20px',
- 		marginLeft: '10px',
+ 		marginLeft: '20px',
  	},
 
 };
@@ -41,11 +41,11 @@ const SignInUpButton = (props) => (
   		</div>
       </MediaQuery>
     </MediaQuery>
-    <MediaQuery query='(max-device-width: 824px)'>
+    <MediaQuery query='(max-device-width: 1224px)'>
       <MediaQuery query='(orientation: portrait)'>
         <div style = {styles.divCentral}>
-		    <RaisedButton style={styles.button} label="Sign Up" primary={false} />
-		    <RaisedButton style={styles.button} label="Sign In" primary={false} />
+		    <RaisedButton style={styles.buttonLeft} label="Sign Up" primary={false} />
+		    <RaisedButton style={styles.buttonRight} label="Sign In" primary={false} />
   		</div>
       </MediaQuery>
       <MediaQuery query='(orientation: landscape)'>

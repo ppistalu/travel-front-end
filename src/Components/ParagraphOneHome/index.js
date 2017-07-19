@@ -26,7 +26,7 @@ const ParagraphOneHome = (props) => (
         <p style = {styles.paragraphOne}>Please select your destination...</p>
       </MediaQuery>
     </MediaQuery>
-    <MediaQuery query='(max-device-width: 824px)'>
+    <MediaQuery query='(max-device-width: 1224px)'>
       <MediaQuery query='(orientation: portrait)'>
         <p style = {styles.paragrapOneMobile}>Please select your destination...</p>
       </MediaQuery>

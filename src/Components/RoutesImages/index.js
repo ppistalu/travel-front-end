@@ -15,8 +15,9 @@ const styles = {
     display: 'flex',
     flexWrap: 'nowrap',
     overflowX: 'auto',
-    width: '400px',
+    width: '350px',
     margin: '40px auto',
+    marginBottom:'0px'
   },
 };
 

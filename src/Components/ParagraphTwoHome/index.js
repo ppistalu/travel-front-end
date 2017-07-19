@@ -26,7 +26,7 @@ const ParagraphTwoHome = (props) => (
         <p style = {styles.paragraphTwo}>Or let yourself inspired by our most popular routes:</p>
       </MediaQuery>
     </MediaQuery>
-    <MediaQuery query='(max-device-width: 824px)'>
+    <MediaQuery query='(max-device-width: 1224px)'>
       <MediaQuery query='(orientation: portrait)'>
         <p style = {styles.paragrapTwoMobilePortait}>Or let yourself inspired by our most popular routes:</p>
       </MediaQuery>
