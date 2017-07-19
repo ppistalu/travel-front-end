@@ -49,10 +49,7 @@ const SignInUpButton = (props) => (
   		</div>
       </MediaQuery>
       <MediaQuery query='(orientation: landscape)'>
-      <div style = {styles.divCentral}>
-        <RaisedButton style={styles.buttonLeft} label="Sign Up" primary={false} />
-        <RaisedButton style={styles.buttonRight} label="Sign In" primary={false} />
-      </div>
+        <NavigationBar/>
       </MediaQuery>
     </MediaQuery>
   </div>
