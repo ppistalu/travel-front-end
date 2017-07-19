@@ -6,6 +6,8 @@ import {GridList} from 'material-ui/GridList';
 import SignInUpButton from '../../Components/SignInUpButton';
 import HomeSearchBar from '../../Components/HomeSearchBar';
 import ButtonFlatWorldMap from '../../Components/ButtonFlatWorldMap';
+import ParagraphOneHome from '../../Components/ParagraphOneHome';
+import ParagraphTwoHome from '../../Components/ParagraphTwoHome';
 
 class Home extends Component {
 
@@ -21,10 +23,10 @@ class Home extends Component {
     return (
     	<div>
         <SignInUpButton/>
-        <p style = {styles.paragraphOne}>Please select your destination...</p>
+        <ParagraphOneHome/>
     	  <HomeSearchBar options = {routes}/>
         <ButtonFlatWorldMap text = {"Add a route"}/>
-    	  <p style = {styles.paragraphTwo}>Or let yourself inspired by our most popular routes:</p>
+    	  <ParagraphTwoHome/>
         <GridList style = {styles.gridList} cols={2.2}>
       		{Object.values(routes).map(e => 
       			<HomeMapItem route ={e} key={e.id}/>
@@ -50,15 +52,5 @@ const styles = {
     width: '1000px',
     margin: '40px auto',
   },
-  paragraphOne: {
-    fontSize:'35px', 
-    fontWeight:'bold', 
-    fontFamily:'sans-serif', 
-    textAlign:'center', 
-    marginTop:'120px'
-  },
-  paragraphTwo: {
-    textAlign:'center', 
-    marginTop:"120px"
-  },
-};	      	
+};
+
