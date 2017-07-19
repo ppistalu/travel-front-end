@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import {fetchRoutes} from '../../Store/actions.js';
 import {connect} from 'react-redux';
-import HomeMapItem from '../../Containers/HomeMapItem/';
-import {GridList} from 'material-ui/GridList';
 import SignInUpButton from '../../Components/SignInUpButton';
 import HomeSearchBar from '../../Components/HomeSearchBar';
 import ButtonFlatWorldMap from '../../Components/ButtonFlatWorldMap';
 import ParagraphOneHome from '../../Components/ParagraphOneHome';
 import ParagraphTwoHome from '../../Components/ParagraphTwoHome';
+import RoutesImages from '../../Components/RoutesImages';
 
 class Home extends Component {
 
@@ -27,11 +26,7 @@ class Home extends Component {
     	  <HomeSearchBar options = {routes}/>
         <ButtonFlatWorldMap text = {"Add a route"}/>
     	  <ParagraphTwoHome/>
-        <GridList style = {styles.gridList} cols={2.2}>
-      		{Object.values(routes).map(e => 
-      			<HomeMapItem route ={e} key={e.id}/>
-	      	)}
-      	</GridList>
+        <RoutesImages routes = {routes}/>
       </div>
     );
   }
@@ -39,18 +34,8 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	routes:state.routes,
+	routes:Object.values(state.routes),
 })
 
 export default connect(mapStateToProps)(Home);
-
-const styles = {
-  gridList: {
-    display: 'flex',
-    flexWrap: 'nowrap',
-    overflowX: 'auto',
-    width: '1000px',
-    margin: '40px auto',
-  },
-};
 

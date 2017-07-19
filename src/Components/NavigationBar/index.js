@@ -24,8 +24,8 @@ class NavigationBar extends React.Component {
 		  				color:'black', 
 		  				marginTop:'13px', 
 		  				marginLeft:'50px'}} />}
-		    title = "Travel the world"
-		    style = {{backgroundColor:'white'}} titleStyle={{color:'black'}}
+		    title="Travel the world"
+		    style={{ backgroundColor:'white' }} titleStyle={{ color:'black' }}
 
 		  > 
 		  		<ButtonSimple text ={"Sign up"}/>

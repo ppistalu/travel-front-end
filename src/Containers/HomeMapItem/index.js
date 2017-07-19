@@ -26,7 +26,7 @@ class HomeMapItem extends Component {
     const {photo} = this.props.route;
     const {id} = this.props.route;
     return (
-        <GridTile style = {{marginLeft:"20px", cursor:'pointer'}} 
+        <GridTile style = {{marginLeft:"20px", cursor:'pointer', maxWidth:"500px"}} 
           key={id} onClick={this.handleClick}
           title={name}
           actionIcon={<IconButton><StarBorder color="rgb(0, 188, 212)" />
