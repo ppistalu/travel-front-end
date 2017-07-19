@@ -14,7 +14,7 @@ const styles = {
     fontWeight:'bold', 
     fontFamily:'sans-serif', 
     textAlign:'center', 
-    marginTop:'40px'
+    marginTop:'30px'
   },
 };
 

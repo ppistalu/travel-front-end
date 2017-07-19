@@ -10,11 +10,11 @@ const styles = {
     textAlign:'center', 
     marginTop:"50px",
     marginLeft:'30px',
-    marginRight:'30px',
+    marginRight:'20px',
   },
   paragrapTwoMobile: {
     textAlign:'center', 
-    marginTop:"20px",
+    marginTop:"10px",
   },
 };
 
