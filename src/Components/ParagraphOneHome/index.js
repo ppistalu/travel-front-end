@@ -1,5 +1,9 @@
 import React from 'react';
-import MediaQuery from 'react-responsive';
+import Responsive from 'react-responsive';
+ 
+// Default (desktop, tablet) and mobile setup 
+const Default = ({ children }) => <Responsive minWidth={768} children={children} />;
+const Mobile = ({ children }) => <Responsive maxWidth={768} children={children} />;
 
 const styles = {
   paragraphOne: {
@@ -21,14 +25,8 @@ const styles = {
 
 const ParagraphOneHome = (props) => (
   <div>
-    <MediaQuery minDeviceWidth={1224}>
-      <MediaQuery query='(min-width: 1224px)'>
-        <p style = {styles.paragraphOne}>Please select your destination...</p>
-      </MediaQuery>
-    </MediaQuery>
-    <MediaQuery query='(max-device-width: 1224px)'>
-        <p style = {styles.paragrapOneMobile}>Please select your destination...</p>
-    </MediaQuery>
+    <Default><p style = {styles.paragraphOne}>Please select your destination...</p></Default>
+    <Mobile><p style = {styles.paragrapOneMobile}>Please select your destination...</p></Mobile>
   </div>
 );
 

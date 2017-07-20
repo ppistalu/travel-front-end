@@ -1,14 +1,18 @@
 import {GridList} from 'material-ui/GridList';
 import React from 'react';
-import MediaQuery from 'react-responsive';
 import HomeMapItem from '../../Containers/HomeMapItem'
+import Responsive from 'react-responsive';
+ 
+// Default (desktop, tablet) and mobile setup 
+const Default = ({ children }) => <Responsive minWidth={768} children={children} />;
+const Mobile = ({ children }) => <Responsive maxWidth={768} children={children} />;
 
 const styles = {
   gridList: {
     display: 'flex',
     flexWrap: 'nowrap',
     overflowX: 'auto',
-    width: '1000px',
+    width: '970px',
     margin: '40px auto',
   },
    gridListMobilePortrait: {
@@ -23,27 +27,20 @@ const styles = {
 
 const RouteImages = (props) => (
   <div>
-    <MediaQuery minDeviceWidth={1224}>
-      <MediaQuery query='(min-width: 1224px)'>
+      <Default>
         <GridList style = {styles.gridList} cols={2.2}>
             {props.routes.map(e => 
-      			<HomeMapItem route ={e} key={e.id}/>
-	      	)}
-      	</GridList>
-      </MediaQuery>
-    </MediaQuery>
-    <MediaQuery query='(max-device-width: 824px)'>
-      <MediaQuery query='(orientation: portrait)'>
-        <GridList style = {styles.gridListMobilePortrait} cols={2.2}>
+            <HomeMapItem route ={e} key={e.id}/>
+          )}
+        </GridList>
+    </Default>
+    <Mobile>
+      <GridList style = {styles.gridListMobilePortrait} cols={2.2}>
             {props.routes.map(e => 
-      			<HomeMapItem route ={e} key={e.id}/>
-	      	)}
-      	</GridList>
-      </MediaQuery>
-      <MediaQuery query='(orientation: landscape)'>
-        <p style = {styles.paragrapOneMobile}>Please select your destination...</p>
-      </MediaQuery>
-    </MediaQuery>
+            <HomeMapItem route ={e} key={e.id}/>
+          )}
+        </GridList>
+    </Mobile>
   </div>
 );
 

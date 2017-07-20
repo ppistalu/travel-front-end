@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import {GridTile} from 'material-ui/GridList';
-import IconButton from 'material-ui/IconButton';
-import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import {withRouter} from 'react-router';
-import './index.css';
+import HomeMapItemComponent from '../../Components/HomeMapItemComponent'
 
 class HomeMapItem extends Component {
 
@@ -25,17 +22,12 @@ class HomeMapItem extends Component {
     const {name} = this.props.route;
     const {photo} = this.props.route;
     const {id} = this.props.route;
+    const handleClick = this.handleClick;
     return (
-        <GridTile style = {{marginLeft:"20px", cursor:'pointer', maxWidth:"500px"}} 
-          key={id} onClick={this.handleClick}
-          title={name}
-          actionIcon={<IconButton><StarBorder color="rgb(0, 188, 212)" />
-          </IconButton>}
-          className = "titleStyle"
-          titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
-        >
-          <img src={photo} alt=''/>
-        </GridTile>
+      <HomeMapItemComponent handleClick={ handleClick }
+                   name={ name } 
+                   id={ id } 
+                   photo={ photo }/>
     );
   }
 }

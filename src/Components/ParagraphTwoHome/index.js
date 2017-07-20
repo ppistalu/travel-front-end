@@ -1,5 +1,9 @@
 import React from 'react';
-import MediaQuery from 'react-responsive';
+import Responsive from 'react-responsive';
+ 
+// Default (desktop, tablet) and mobile setup 
+const Default = ({ children }) => <Responsive minWidth={768} children={children} />;
+const Mobile = ({ children }) => <Responsive maxWidth={768} children={children} />;
 
 const styles = {
   paragraphTwo: {
@@ -21,19 +25,8 @@ const styles = {
 
 const ParagraphTwoHome = (props) => (
   <div>
-    <MediaQuery minDeviceWidth={1224}>
-      <MediaQuery query='(min-width: 1224px)'>
-        <p style = {styles.paragraphTwo}>Or let yourself inspired by our most popular routes:</p>
-      </MediaQuery>
-    </MediaQuery>
-    <MediaQuery query='(max-device-width: 1224px)'>
-      <MediaQuery query='(orientation: portrait)'>
-        <p style = {styles.paragrapTwoMobilePortait}>Or let yourself inspired by our most popular routes:</p>
-      </MediaQuery>
-      <MediaQuery query='(orientation: landscape)'>
-        <p style = {styles.paragrapTwoMobile}>Or let yourself inspired by our most popular routes:</p>
-      </MediaQuery>
-    </MediaQuery>
+    <Default><p style = {styles.paragraphTwo}>Or let yourself inspired by our most popular routes:</p></Default>
+    <Mobile> <p style = {styles.paragrapTwoMobilePortait}>Or let yourself inspired by our most popular routes:</p></Mobile>
   </div>
 );
 
