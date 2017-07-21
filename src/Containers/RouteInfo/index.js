@@ -22,7 +22,6 @@ class RouteInfo extends React.Component {
     if(currentRouteInfo===undefined){
       return null;
     }
-    const {route} = this.props
     return (
   <div>
     <Default>
@@ -48,16 +47,20 @@ class RouteInfo extends React.Component {
     </Default>
     <Mobile>
       <div style = {{marginBottom:'10px',display:'flex nowrap', width:'100%'}}>
-        <p style={{marginLeft:'90px',fontWeight:'bold', marginBottom:'10px'}}>{currentRouteInfo.name}</p>
-        <GridTile 
-            style = {{marginLeft:'55px',width:'200px', height:'180px', marginBottom:'10px'}}
-            title={currentRouteInfo.name}
-            titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
-        >
-          <img src= {currentRouteInfo.photo} alt ="" />
-        </GridTile>
+        <div style = {{display:'flex',justifyContent:"center", alignItems:'center'}}>
+          <p style={{fontWeight:'bold', marginBottom:'10px', verticalAlign:'middle'}}>{currentRouteInfo.name}</p>
+        </div>
+        <div style = {{display:'flex',justifyContent:"center", alignItems:'center'}}>
+          <GridTile 
+              style = {{width:'200px', height:'180px', marginBottom:'10px'}}
+              title={currentRouteInfo.name}
+              titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
+          >
+            <img src= {currentRouteInfo.photo} alt ="" />
+          </GridTile>
+        </div>
         <div style = {{marginLeft:"2px"}}>
-          <p style={{marginTop:'0px'}}><strong>Description:</strong>{" " + currentRouteInfo.description}</p>
+          <p style={{marginTop:'15px'}}><strong>Description:</strong>{" " + currentRouteInfo.description}</p>
           <p><strong>Duration:</strong>{" " + currentRouteInfo.duration + " hours"}</p>
           <p><strong>Difficulty:</strong>{" " + currentRouteInfo.difficulty}</p>
         </div>
